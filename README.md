@@ -26,7 +26,7 @@ Leiningen:
 
 ## License
 
-Copyright © 2018 Quorum Control, GmbH
+Copyright © 2018-2019 Quorum Control, GmbH
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at
