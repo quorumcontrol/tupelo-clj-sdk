@@ -2,6 +2,7 @@ syntax = "proto3";
 package walletrpc;
 
 option go_package = "walletrpc";
+option java_package = "com.quorumcontrol.tupelo.walletrpc";
 
 message Credentials {
   string wallet_name = 1;

@@ -1,8 +1,9 @@
 (ns tupelo-client.chain-tree
   (:require [tupelo-client.credentials :as creds])
-  (:import (walletrpc TupeloRpc$GenerateChainRequest
-                      WalletRPCServiceGrpc$WalletRPCServiceBlockingStub
-                      TupeloRpc$SetDataRequest)
+  (:import (com.quorumcontrol.tupelo.walletrpc
+            TupeloRpc$GenerateChainRequest
+            WalletRPCServiceGrpc$WalletRPCServiceBlockingStub
+            TupeloRpc$SetDataRequest)
            (com.google.protobuf ByteString)))
 
 (defn create [^WalletRPCServiceGrpc$WalletRPCServiceBlockingStub client

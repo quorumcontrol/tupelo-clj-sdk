@@ -1,5 +1,5 @@
 (ns tupelo-client.credentials
-  (:import (walletrpc TupeloRpc$Credentials))
+  (:import (com.quorumcontrol.tupelo.walletrpc TupeloRpc$Credentials))
   (:refer-clojure :exclude [set]))
 
 (defn build [wallet-name pass-phrase]

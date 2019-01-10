@@ -1,7 +1,7 @@
 (ns tupelo-client.grpc
   (:require [clojure.string :as str])
   (:import (io.grpc ManagedChannelBuilder)
-           (walletrpc WalletRPCServiceGrpc)))
+           (com.quorumcontrol.tupelo.walletrpc WalletRPCServiceGrpc)))
 
 (defn client* [server & [tls]]
   (let [[host port-str] (str/split server #":")

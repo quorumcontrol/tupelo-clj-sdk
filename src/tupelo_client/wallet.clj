@@ -1,7 +1,8 @@
 (ns tupelo-client.wallet
   (:require [tupelo-client.credentials :as creds])
-  (:import (walletrpc TupeloRpc$RegisterWalletRequest
-                      WalletRPCServiceGrpc$WalletRPCServiceBlockingStub)))
+  (:import (com.quorumcontrol.tupelo.walletrpc
+            TupeloRpc$RegisterWalletRequest
+            WalletRPCServiceGrpc$WalletRPCServiceBlockingStub)))
 
 (defn register [^WalletRPCServiceGrpc$WalletRPCServiceBlockingStub client
                 {wallet-name :walletName, pass-phrase :passPhrase}]
