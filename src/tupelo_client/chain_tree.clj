@@ -5,7 +5,8 @@
   (:import (com.quorumcontrol.tupelo.walletrpc
             TupeloRpc$GenerateChainRequest
             WalletRPCServiceGrpc$WalletRPCServiceBlockingStub
-            TupeloRpc$SetDataRequest TupeloRpc$ResolveRequest)
+            TupeloRpc$SetDataRequest TupeloRpc$ResolveRequest
+            TupeloRpc$SetOwnerRequest)
            (com.google.protobuf ByteString)))
 
 (defn create [^WalletRPCServiceGrpc$WalletRPCServiceBlockingStub client
@@ -44,3 +45,16 @@
       (if (not (str/blank? remaining-path))
         (assoc data :remaining-path remaining-path)
         data))))
+
+(defn change-owner [^WalletRPCServiceGrpc$WalletRPCServiceBlockingStub client
+                    {wallet-name :walletName, pass-phrase :passPhrase}
+                    chain-id key-addr new-owner-keys]
+  (let [req-builder (-> (TupeloRpc$SetOwnerRequest/newBuilder)
+                        (creds/set wallet-name pass-phrase)
+                        (.setChainId chain-id)
+                        (.setKeyAddr key-addr))
+        _ (doseq [k new-owner-keys]
+            (.addNewOwnerKeys req-builder k))
+        req (.build req-builder)
+        resp (.setOwner client req)]
+    {:tip (.getTip resp)}))

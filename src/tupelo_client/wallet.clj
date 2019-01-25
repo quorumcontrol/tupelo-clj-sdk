@@ -11,3 +11,4 @@
                 .build)
         resp (.register client req)]
     {:wallet-name (.getWalletName resp)}))
+
