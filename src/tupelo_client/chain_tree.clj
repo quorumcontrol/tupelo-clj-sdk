@@ -1,9 +1,11 @@
 (ns tupelo-client.chain-tree
-  (:require [tupelo-client.credentials :as creds])
+  (:require [clj-cbor.core :as cbor]
+            [tupelo-client.credentials :as creds]
+            [clojure.string :as str])
   (:import (com.quorumcontrol.tupelo.walletrpc
             TupeloRpc$GenerateChainRequest
             WalletRPCServiceGrpc$WalletRPCServiceBlockingStub
-            TupeloRpc$SetDataRequest)
+            TupeloRpc$SetDataRequest TupeloRpc$ResolveRequest)
            (com.google.protobuf ByteString)))
 
 (defn create [^WalletRPCServiceGrpc$WalletRPCServiceBlockingStub client
@@ -23,9 +25,22 @@
                 (.setChainId chain-id)
                 (.setKeyAddr key-addr)
                 (.setPath path)
-                ;; TODO: Assuming data is a String probably isn't right.
-                ;; Seems likely it should be a CBOR blob instead.
-                (.setValue (ByteString/copyFromUtf8 data))
+                (.setValue (ByteString/copyFrom (cbor/encode data)))
                 .build)
         resp (.setData client req)]
-    resp))
+    {:tip (.getTip resp)}))
+
+(defn resolve [^WalletRPCServiceGrpc$WalletRPCServiceBlockingStub client
+               {wallet-name :walletName, pass-phrase :passPhrase}
+               chain-id path]
+  (let [req (-> (TupeloRpc$ResolveRequest/newBuilder)
+                (creds/set wallet-name pass-phrase)
+                (.setChainId chain-id)
+                (.setPath path)
+                .build)
+        resp (.resolve client req)
+        data {:data (-> resp .getData .newInput cbor/decode)}]
+    (let [remaining-path (.getRemainingPath resp)]
+      (if (not (str/blank? remaining-path))
+        (assoc data :remaining-path remaining-path)
+        data))))
