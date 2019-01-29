@@ -7,7 +7,8 @@
             WalletRPCServiceGrpc$WalletRPCServiceBlockingStub
             TupeloRpc$SetDataRequest TupeloRpc$ResolveRequest
             TupeloRpc$SetOwnerRequest)
-           (com.google.protobuf ByteString)))
+           (com.google.protobuf ByteString))
+  (:refer-clojure :exclude [resolve]))
 
 (defn create [^WalletRPCServiceGrpc$WalletRPCServiceBlockingStub client
               {:keys [wallet-name pass-phrase]} key-addr]
