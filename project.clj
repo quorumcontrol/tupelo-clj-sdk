@@ -17,5 +17,4 @@
   :protoc-grpc {:version "1.17.1"}
   :java-source-paths ["target/generated-sources/protobuf"]
   :repl-options {:init-ns tupelo-client.core}
-  :main ^:skip-aot tupelo-client.core
   :profiles {:uberjar {:aot :all}})
