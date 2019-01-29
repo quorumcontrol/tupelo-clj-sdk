@@ -3,14 +3,13 @@
             [tupelo-client.grpc :as grpc]
             [tupelo-client.key :as key]
             [tupelo-client.wallet :as wallet])
-  (:import (java.util Date))
+  (:import (java.time Instant))
   (:gen-class))
 
 (defn -main [& args]
-  (println "Do the damn thing!")
   (let [client (grpc/client "localhost:50051")
-        creds {:walletName (str "foo-" (Date.))
-               :passPhrase "foo"}
+        creds {:wallet-name (str "foo-" (.getEpochSecond (Instant/now)))
+               :pass-phrase "foo"}
         wallet-resp (wallet/register client creds)
         _ (println "Register wallet response:" (pr-str wallet-resp))
         {:keys [key-addr] :as gen-key-resp} (key/generate client creds)
@@ -21,8 +20,8 @@
         _ (println "set-data response:" (pr-str set-data-resp))
         resolve-resp (chain-tree/resolve client creds chain-tree-id "/foo")
         _ (println "resolve response:" (pr-str resolve-resp))
-        creds2 {:walletName (str "bar-" (Date.))
-                :passPhrase "bar"}
+        creds2 {:wallet-name (str "bar-" (.getEpochSecond (Instant/now)))
+                :pass-phrase "bar"}
         wallet2-resp (wallet/register client creds2)
         _ (println "Register wallet2 response:" (pr-str wallet2-resp))
         {key-addr2 :key-addr :as gen-key2-resp} (key/generate client creds2)

@@ -5,7 +5,7 @@
             WalletRPCServiceGrpc$WalletRPCServiceBlockingStub)))
 
 (defn register [^WalletRPCServiceGrpc$WalletRPCServiceBlockingStub client
-                {wallet-name :walletName, pass-phrase :passPhrase}]
+                {:keys [wallet-name pass-phrase]}]
   (let [req (-> (TupeloRpc$RegisterWalletRequest/newBuilder)
                 (creds/set wallet-name pass-phrase)
                 .build)

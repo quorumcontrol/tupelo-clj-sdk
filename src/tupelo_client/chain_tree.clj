@@ -10,7 +10,7 @@
            (com.google.protobuf ByteString)))
 
 (defn create [^WalletRPCServiceGrpc$WalletRPCServiceBlockingStub client
-              {wallet-name :walletName, pass-phrase :passPhrase} key-addr]
+              {:keys [wallet-name pass-phrase]} key-addr]
   (let [req (-> (TupeloRpc$GenerateChainRequest/newBuilder)
                 (creds/set wallet-name pass-phrase)
                 (.setKeyAddr key-addr)
@@ -19,8 +19,7 @@
     {:chain-tree-id (.getChainId resp)}))
 
 (defn set-data [^WalletRPCServiceGrpc$WalletRPCServiceBlockingStub client
-                {wallet-name :walletName, pass-phrase :passPhrase}
-                chain-id key-addr path data]
+                {:keys [wallet-name pass-phrase]} chain-id key-addr path data]
   (let [req (-> (TupeloRpc$SetDataRequest/newBuilder)
                 (creds/set wallet-name pass-phrase)
                 (.setChainId chain-id)
@@ -32,8 +31,7 @@
     {:tip (.getTip resp)}))
 
 (defn resolve [^WalletRPCServiceGrpc$WalletRPCServiceBlockingStub client
-               {wallet-name :walletName, pass-phrase :passPhrase}
-               chain-id path]
+               {:keys [wallet-name pass-phrase]} chain-id path]
   (let [req (-> (TupeloRpc$ResolveRequest/newBuilder)
                 (creds/set wallet-name pass-phrase)
                 (.setChainId chain-id)
@@ -47,8 +45,8 @@
         data))))
 
 (defn change-owner [^WalletRPCServiceGrpc$WalletRPCServiceBlockingStub client
-                    {wallet-name :walletName, pass-phrase :passPhrase}
-                    chain-id key-addr new-owner-keys]
+                    {:keys [wallet-name pass-phrase]} chain-id key-addr
+                    new-owner-keys]
   (let [req-builder (-> (TupeloRpc$SetOwnerRequest/newBuilder)
                         (creds/set wallet-name pass-phrase)
                         (.setChainId chain-id)
