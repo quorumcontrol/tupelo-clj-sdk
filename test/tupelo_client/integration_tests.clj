@@ -87,3 +87,17 @@
                                       "/test/nested/other" "moar")
                  (:data (chain-tree/resolve @client creds chain-tree-id
                                             "/test/nested/other")))))))))
+
+(deftest change-chain-tree-owner-test
+  (let [creds (gen-creds)]
+    (wallet/register @client creds)
+    (let [{:keys [key-addr]} (key/generate @client creds)
+          {:keys [chain-tree-id]} (chain-tree/create @client creds key-addr)
+          {new-owner-key :key-addr} (key/generate @client creds)]
+      (testing "changing to one new owner succeeds"
+        (let [new-tip (:tip
+                       (chain-tree/change-owner @client creds chain-tree-id
+                                                key-addr [new-owner-key]))]
+          (is (and (string? new-tip)
+                   (= 49 (count new-tip)))))))))
+
