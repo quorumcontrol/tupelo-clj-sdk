@@ -9,7 +9,8 @@
 
 (def client
   (delay
-   (grpc/client "localhost:50051")))
+   (grpc/client
+     (or (System/getenv "TUPELO_RPC_HOST") "localhost:50051"))))
 
 (defn gen-creds []
   {:wallet-name (str "test-" (.getEpochSecond (Instant/now)) "-"
