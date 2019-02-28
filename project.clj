@@ -11,10 +11,12 @@
                  [io.grpc/grpc-stub "1.18.0"]
                  [io.grpc/grpc-netty "1.18.0"]
                  [mvxcvi/clj-cbor "0.7.1"]]
-  :plugins [[lein-protoc "0.5.0"]]
+  :plugins [[lein-protoc "0.5.0"]
+            [lein-shell "0.5.0"]]
   :proto-source-paths ["resources/proto"]
   :protoc-version "3.6.1"
   :protoc-grpc {:version "1.17.1"}
   :java-source-paths ["target/generated-sources/protobuf"]
   :repl-options {:init-ns tupelo-client.core}
-  :profiles {:uberjar {:aot :all}})
+  :profiles {:uberjar {:aot :all}}
+  :aliases {"integration-test" ["shell" "scripts/integration-tests"]})
