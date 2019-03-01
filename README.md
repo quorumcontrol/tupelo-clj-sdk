@@ -28,7 +28,7 @@ Leiningen:
 
 There are some RPC integration tests that can be run against a live Tupelo RPC
 server by running `lein integration-test`. Note that you will need a working
-Docker environment setup.
+Docker environment setup and leiningen installed.
 
 ## License
 
