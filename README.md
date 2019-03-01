@@ -1,5 +1,7 @@
 # tupelo-client
 
+Build status: [![CircleCI](https://circleci.com/gh/quorumcontrol/tupelo.clj.svg?style=svg)](https://circleci.com/gh/quorumcontrol/tupelo.clj)
+
 A Clojure library for using the Tupelo distributed ledger system.
 
 Specifically it allows you to manage Tupelo chain trees and submit chain tree
