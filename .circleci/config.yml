@@ -24,9 +24,7 @@ jobs:
 
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 18.09.3-ce
-          docker_layer_caching: true
+      - setup_remote_docker
 
       # Copy source into dummy volume container
       - run: |
