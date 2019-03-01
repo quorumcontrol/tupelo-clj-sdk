@@ -20,9 +20,18 @@ jobs:
       LEIN_ROOT: "true"
       # Customize the JVM maximum heap limit
       JVM_OPTS: -Xmx3200m
+      SOURCE_MOUNT: --volumes-from=source
 
     steps:
       - checkout
+      - setup_remote_docker:
+          version: 18.09.3-ce
+          docker_layer_caching: true
+
+      # Copy source into dummy volume container
+      - run: |
+          docker create -v /src --name source alpine /bin/true
+          docker cp . source:/src
 
       # Download and cache dependencies
       - restore_cache:
