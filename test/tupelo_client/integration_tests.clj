@@ -48,46 +48,62 @@
         (is (= (str "did:tupelo:" key-addr)
                (:chain-tree-id (chain-tree/create @client creds key-addr))))))))
 
+;; TODO: Remove the `resolve` versions of these once resolve-data is released
 (deftest set-data-and-resolve-test
   (let [creds (gen-creds)]
     (wallet/register @client creds)
     (let [{:keys [key-addr]} (key/generate @client creds)
           {:keys [chain-tree-id]} (chain-tree/create @client creds key-addr)]
       (testing "setting data at new path succeeds & is resolveable"
-        (is (= "foo"
-               (do
-                 (chain-tree/set-data @client creds chain-tree-id key-addr
-                                      "/test" "foo")
-                 (:data (chain-tree/resolve @client creds chain-tree-id
-                                            "/test"))))))
+        (chain-tree/set-data @client creds chain-tree-id key-addr
+                             "/test" "foo")
+        (is (or
+             (= "foo"
+                (:data (chain-tree/resolve @client creds chain-tree-id
+                                           "/test")))
+             (= "foo"
+                (:data (chain-tree/resolve-data @client creds chain-tree-id
+                                                "/test"))))))
       (testing "setting data at deep path succeeds & is resolveable"
-        (is (= "hello"
-               (do
-                 (chain-tree/set-data @client creds chain-tree-id key-addr
-                                      "/testing/a/deep/path" "hello")
-                 (:data (chain-tree/resolve @client creds chain-tree-id
-                                            "/testing/a/deep/path"))))))
+        (chain-tree/set-data @client creds chain-tree-id key-addr
+                             "/testing/a/deep/path" "hello")
+        (is (or
+             (= "hello"
+                (:data (chain-tree/resolve @client creds chain-tree-id
+                                           "/testing/a/deep/path")))
+             (= "hello"
+                (:data (chain-tree/resolve-data @client creds chain-tree-id
+                                                "/testing/a/deep/path"))))))
       (testing "setting data a third time succeeds & is resolveable"
-        (is (= "out"
-               (do
-                 (chain-tree/set-data @client creds chain-tree-id key-addr
-                                      "/peace" "out")
-                 (:data (chain-tree/resolve @client creds chain-tree-id
-                                            "/peace"))))))
+        (chain-tree/set-data @client creds chain-tree-id key-addr
+                             "/peace" "out")
+        (is (or
+             (= "out"
+                (:data (chain-tree/resolve @client creds chain-tree-id
+                                           "/peace")))
+             (= "out"
+                (:data (chain-tree/resolve-data @client creds chain-tree-id
+                                                "/peace"))))))
       (testing "ovewriting existing path w/ nested data succeeds"
-        (is (= "howdy"
-               (do
-                 (chain-tree/set-data @client creds chain-tree-id key-addr
-                                      "/test/nested/path" "howdy")
-                 (:data (chain-tree/resolve @client creds chain-tree-id
-                                            "/test/nested/path"))))))
+        (chain-tree/set-data @client creds chain-tree-id key-addr
+                             "/test/nested/path" "howdy")
+        (is (or
+             (= "howdy"
+                (:data (chain-tree/resolve @client creds chain-tree-id
+                                           "/test/nested/path")))
+             (= "howdy"
+                (:data (chain-tree/resolve-data @client creds chain-tree-id
+                                                "/test/nested/path"))))))
       (testing "add data to existing path succeeds"
-        (is (= "moar"
-               (do
-                 (chain-tree/set-data @client creds chain-tree-id key-addr
-                                      "/test/nested/other" "moar")
-                 (:data (chain-tree/resolve @client creds chain-tree-id
-                                            "/test/nested/other")))))))))
+        (chain-tree/set-data @client creds chain-tree-id key-addr
+                             "/test/nested/other" "moar")
+        (is (or
+             (= "moar"
+                (:data (chain-tree/resolve @client creds chain-tree-id
+                                           "/test/nested/other")))
+             (= "moar"
+                (:data (chain-tree/resolve-data @client creds chain-tree-id
+                                                "/test/nested/other")))))))))
 
 (deftest change-chain-tree-owner-test
   (let [creds (gen-creds)]
