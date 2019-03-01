@@ -10,6 +10,8 @@
            (com.google.protobuf ByteString))
   (:refer-clojure :exclude [resolve]))
 
+(def chaintree-data-path "/tree/data")
+
 (defn create [^WalletRPCServiceGrpc$WalletRPCServiceBlockingStub client
               {:keys [wallet-name pass-phrase]} key-addr]
   (let [req (-> (TupeloRpc$GenerateChainRequest/newBuilder)
@@ -44,6 +46,21 @@
       (if (not (str/blank? remaining-path))
         (assoc data :remaining-path remaining-path)
         data))))
+
+(defn path->components [path]
+  (-> path
+      (str/replace #"^/" "")
+      (str/split #"/")))
+
+(defn data-path [path]
+  (->> path
+       path->components
+       (concat (path->components chaintree-data-path))
+       (str/join "/")))
+
+(defn resolve-data [^WalletRPCServiceGrpc$WalletRPCServiceBlockingStub client
+                    creds chain-id path]
+  (resolve client creds chain-id (data-path path)))
 
 (defn change-owner [^WalletRPCServiceGrpc$WalletRPCServiceBlockingStub client
                     {:keys [wallet-name pass-phrase]} chain-id key-addr
