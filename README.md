@@ -24,6 +24,12 @@ Leiningen:
 [com.quorumcontrol/tupelo-client "0.1.0-SNAPSHOT"]
 ```
 
+## Tests
+
+There are some RPC integration tests that can be run against a live Tupelo RPC
+server by running `lein integration-test`. Note that you will need a working
+Docker environment setup.
+
 ## License
 
 Copyright © 2018-2019 Quorum Control, GmbH
