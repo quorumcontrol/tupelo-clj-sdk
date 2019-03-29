@@ -6,7 +6,7 @@
             TupeloRpc$GenerateChainRequest
             WalletRPCServiceGrpc$WalletRPCServiceBlockingStub
             TupeloRpc$SetDataRequest TupeloRpc$ResolveRequest
-            TupeloRpc$SetOwnerRequest TupeloRpc$EstablishTokenRequest)
+            TupeloRpc$SetOwnerRequest TupeloRpc$EstablishTokenRequest TupeloRpc TupeloRpc$MintTokenRequest)
            (com.google.protobuf ByteString))
   (:refer-clojure :exclude [resolve]))
 
@@ -86,4 +86,17 @@
                 (.setMaximum maximum)
                 .build)
         resp (.establishToken client req)]
+    {:tip (.getTip resp)}))
+
+(defn mint-token [^WalletRPCServiceGrpc$WalletRPCServiceBlockingStub client
+                  {:keys [wallet-name pass-phrase]} chain-id key-addr
+                  token-name amount]
+  (let [req (-> (TupeloRpc$MintTokenRequest/newBuilder)
+                (creds/set wallet-name pass-phrase)
+                (.setChainId chain-id)
+                (.setKeyAddr key-addr)
+                (.setTokenName token-name)
+                (.setAmount amount)
+                .build)
+        resp (.mintToken client req)]
     {:tip (.getTip resp)}))

@@ -103,6 +103,7 @@
     (wallet/register @client creds)
     (let [{:keys [key-addr]} (key/generate @client creds)
           {:keys [chain-tree-id]} (chain-tree/create @client creds key-addr)]
+      ;; TODO: Add more scenarios
       (testing "can successfully create a new token"
         (let [new-tip (:tip
                        (chain-tree/establish-token @client creds chain-tree-id
@@ -110,3 +111,20 @@
                                                    {:maximum 100}))]
           (is (and (string? new-tip)
                    (= 49 (count new-tip)))))))))
+
+(deftest mint-token-test
+  (let [creds (gen-creds)]
+    (wallet/register @client creds)
+    (let [{:keys [key-addr]} (key/generate @client creds)
+          {:keys [chain-tree-id]} (chain-tree/create @client creds key-addr)]
+      ;; TODO: Add more scenarios
+      (testing "can successfully mint established tokens"
+        (do
+         (chain-tree/establish-token @client creds chain-tree-id
+                                    key-addr "test-token"
+                                    {:maximum 100})
+         (let [new-tip (:tip
+                        (chain-tree/mint-token @client creds chain-tree-id
+                                               key-addr "test-token" 10))]
+          (is (and (string? new-tip)
+                   (= 49 (count new-tip))))))))))
