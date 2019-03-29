@@ -98,3 +98,15 @@
           (is (and (string? new-tip)
                    (= 49 (count new-tip)))))))))
 
+(deftest establish-token-test
+  (let [creds (gen-creds)]
+    (wallet/register @client creds)
+    (let [{:keys [key-addr]} (key/generate @client creds)
+          {:keys [chain-tree-id]} (chain-tree/create @client creds key-addr)]
+      (testing "can successfully create a new token"
+        (let [new-tip (:tip
+                       (chain-tree/establish-token @client creds chain-tree-id
+                                                   key-addr "test-token"
+                                                   {:maximum 100}))]
+          (is (and (string? new-tip)
+                   (= 49 (count new-tip)))))))))

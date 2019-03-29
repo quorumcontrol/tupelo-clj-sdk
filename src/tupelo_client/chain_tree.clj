@@ -6,7 +6,7 @@
             TupeloRpc$GenerateChainRequest
             WalletRPCServiceGrpc$WalletRPCServiceBlockingStub
             TupeloRpc$SetDataRequest TupeloRpc$ResolveRequest
-            TupeloRpc$SetOwnerRequest)
+            TupeloRpc$SetOwnerRequest TupeloRpc$EstablishTokenRequest)
            (com.google.protobuf ByteString))
   (:refer-clojure :exclude [resolve]))
 
@@ -75,3 +75,15 @@
         resp (.setOwner client req)]
     {:tip (.getTip resp)}))
 
+(defn establish-token [^WalletRPCServiceGrpc$WalletRPCServiceBlockingStub client
+                       {:keys [wallet-name pass-phrase]} chain-id key-addr
+                       token-name {:keys [maximum] :as monetary-policy}]
+  (let [req (-> (TupeloRpc$EstablishTokenRequest/newBuilder)
+                (creds/set wallet-name pass-phrase)
+                (.setChainId chain-id)
+                (.setKeyAddr key-addr)
+                (.setTokenName token-name)
+                (.setMaximum maximum)
+                .build)
+        resp (.establishToken client req)]
+    {:tip (.getTip resp)}))
